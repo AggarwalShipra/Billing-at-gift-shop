@@ -1,3 +1,6 @@
+/*Program ask user to enter the arrival time of all the students and number of gifts purchased by them
+The time for billing for each student is 1 sec per gift i.e if number of gift purchased by student are 5
+then time taken for his/her billing is 5*1 sec*/
 #include<stdio.h>
 #include<stdlib.h>
 struct student
@@ -10,12 +13,12 @@ struct student
 int main()
 {
 	int n=10,i=0,timer=0,running;
+	printf("Enter the time student reached at counter and number of gifts purchased by the student\n");
 	for(i=0;i<n;i++)
 	{
-		printf("Enter the time the student %d reaches at billing counter\n",i+1);
+		printf("For student %d	",i+1);
 		s[i].p_id=i;
 		scanf("%d",&s[i].arr_time);
-		printf("Enter the number of gift bought by student %d\n",i+1);
 		scanf("%d",&s[i].no_of_gift);
 		if(s[i].no_of_gift<=0)
 		{
@@ -29,7 +32,7 @@ int main()
 	printf("Student\tArrival time\tNo of gift\tTime required for billing\n");
 	for(i=0;i<n;i++)
 	{
-		printf("%c\t%d\t%d\t%d\n",s[i].p_id+97,s[i].arr_time,s[i].no_of_gift,s[i].burst_time);
+		printf(" %c\t\t%d\t\t%d\t\t%d\n",s[i].p_id+97,s[i].arr_time,s[i].no_of_gift,s[i].burst_time);
 	}
 	printf("\n\n");
 	printf("--------------------------------------\n");
@@ -49,8 +52,9 @@ int main()
 		}
 			if(running!=10)
 			{
+			printf("Billing of process %c started at %d and finished at ",s[running].p_id+97,timer);
 			timer=timer+s[running].burst_time;
-			printf(" %c ",s[running].p_id+97);
+			printf("%d\n",timer);
 			s[running].burst_time=0;
 			x--;
 			}
