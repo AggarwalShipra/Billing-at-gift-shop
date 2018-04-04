@@ -1,22 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h>
-struct process
+struct student
 {
+	char p_id;
 	int status;
-	int pid;
-	int priority;
 	int arr_time;
+	int no_of_gift;
 	int burst_time;
-	int updated_burst_time;
-	int start;
-	int wait;
-	int complete;
-	int tat;
-};
-void sort(struct process p[],int n)
+}s[10];
+void sort(struct student p[],int n)
 {
 	int i,j;
-	struct process temp;
+	struct student temp;
 	for(i=0;i<n-1;i++)
 	{
 		for(j=0;j<n-i-1;j++)
@@ -27,72 +22,88 @@ void sort(struct process p[],int n)
 				p[j]=p[j+1];
 				p[j+1]=temp;	
 			}
+			if(p[j].arr_time==p[j+1].arr_time)
+			{
+			if(p[j].no_of_gift>p[j+1].no_of_gift)
+			{
+				temp=p[j];
+				p[j]=p[j+1];
+				p[j+1]=temp;	
+			}
+		}
 		}
 	}
 }
 int main()
 {
-	int time,p,i,j,running=-1;
-	printf("Enter number of processes(less than equal to 10)\n");
-	scanf("%d",&p);
-	struct process pro[p];
-	for(i=0;i<p;i++)
+	int n=10,i=0,timer=0,j,q,p,temp;
+	int arr_queue[10];
+	for(i=0;i<n;i++)
 	{
-		printf("For process P %d \nEnter",i+1);
-		printf("Arrival Time Burst Time Priority\n");
-		pro[i].pid=i+1;
-		scanf("%d",&pro[i].arr_time);
-		scanf("%d",&pro[i].burst_time);
-		scanf("%d",&pro[i].priority);
-		pro[i].updated_burst_time=pro[i].burst_time;
-		pro[i].status=0;
-		pro[i].complete=10;
+		printf("Enter the time the student %d reaches at billing counter\n",i+1);
+		s[i].p_id=i+97;
+		scanf("%d",&s[i].arr_time);
+		printf("Enter the number of gift bought by student %d\n",i+1);
+		scanf("%d",&s[i].no_of_gift);
+		s[i].burst_time=s[i].no_of_gift*1;
+		s[i].status=0;
 	}
-	sort(pro,p);
-	printf("Process P \tArrivalTime \tBurstTime \tPriority\n");
-	for(i=0;i<p;i++)
+	printf("Student\tArrival time\tNo of gift(Priority)\tTime required for billing(Burst Time)\n");
+	for(i=0;i<n;i++)
 	{
-		printf("%d \t%d \t%d \t%d\n",pro[i].pid,pro[i].arr_time,pro[i].burst_time,pro[i].priority);
+		printf("%c\t%d\t%d\t%d\n",s[i].p_id,s[i].arr_time,s[i].no_of_gift,s[i].burst_time);
 	}
-	time=pro[0].arr_time;
-	running=0;
-	while(time<20)
+	sort(s,n);
+	printf("\n\n");
+	int x,flag;
+	while(1)//loop variable x,flag variable 
 	{
-		for(i=0;i<p;i++)
+		for(i=0;i<n;i++)
 		{
-			if(pro[i].status==0)
+			if(s[i].burst_time==0)
+			continue;
+			if(s[i].arr_time<=timer&&s[i].status==0)
 			{
-			if(pro[i].arr_time<=time)
-			{
-				if(pro[i].priority<pro[running].priority)
+				arr_queue[j]=s[i].p_id;
+				s[i].status=0;
+				j++;
+				for(q=0;q<j-1;q++)
 				{
-					running=i;
-				}
-				else if(pro[i].priority==pro[running].priority)
-				{
-					if(pro[i].arr_time==pro[running].arr_time)
+					for(p=0;p<j-q-1;p++)
 					{
-						if(pro[i].updated_burst_time<pro[running].updated_burst_time)
+						if(s[arr_queue[p]-97].no_of_gift>s[arr_queue[p]-97].no_of_gift)
 						{
-							running=i;
+							temp=arr_queue[p];
+							arr_queue[p]=arr_queue[p+1];
+							arr_queue[p+1]=temp;
 						}
 					}
 				}
 			}
+			timer=timer+s[arr_queue[0]-97].burst_time;
+			printf("\n%dTimer%d",s[arr_queue[0]-97].burst_time);
+			printf("Student %c\n",s[0].p_id);
+			s[arr_queue[0]-97].burst_time=0;
+			if(j==1)
+			{
+				j--;
 			}
+			for(p=0;p<j-1;p++)
+			{
+				arr_queue[p]=arr_queue[p+1];
+			}
+			j--;
 		}
-		printf("At time %d Process %d is running\n",time,pro[running].pid);
-		pro[running].updated_burst_time-=1;
-		time=time+1;
-		if(pro[running].updated_burst_time==0)
+		flag=0;
+		for(x=0;x<10;x++)
 		{
-			pro[running].complete=time;
-			pro[running].status=1;
+			if(s[x].burst_time!=0)
+			flag++;
 		}
+		break;
 	}
-	printf("Process P \tArrivalTime \tBurstTime \tPriority \tUpdated BurstTime\n");
-	for(i=0;i<p;i++)
+	/*for(i=0;i<n;i++)
 	{
-		printf("%d \t%d \t%d \t%d \t%d\n",pro[i].pid,pro[i].arr_time,pro[i].burst_time,pro[i].priority,pro[i].complete);
-	}
+		printf("%c\t%d\t%d\t%d\n",s[i].p_id,s[i].arr_time,s[i].no_of_gift,s[i].burst_time);
+	}*/
 }
