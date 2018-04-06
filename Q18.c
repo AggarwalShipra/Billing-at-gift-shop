@@ -10,13 +10,30 @@ struct student
 	int no_of_gift;
 	int burst_time;	
 }s[11];
+void sort(struct student p[],int n)
+{
+	int i,j;
+	struct student temp;
+	for(i=0;i<n-1;i++)
+	{
+		for(j=0;j<n-i-1;j++)
+		{
+			if(p[j].arr_time>p[j+1].arr_time)
+			{
+				temp=p[j];
+				p[j]=p[j+1];
+				p[j+1]=temp;	
+			}
+		}
+	}
+}
 int main()
 {
 	int n=10,i=0,timer=0,running;
 	printf("Enter the time student reached at counter and number of gifts purchased by the student\n");
 	for(i=0;i<n;i++)
 	{
-		printf("For student %d	",i+1);
+		printf("For student %c	",i+97);
 		s[i].p_id=i;
 		scanf("%d",&s[i].arr_time);
 		scanf("%d",&s[i].no_of_gift);
@@ -28,6 +45,7 @@ int main()
 		}
 		s[i].burst_time=s[i].no_of_gift*1;
 	}
+	sort(s,10);
 	s[10].p_id=-1;s[10].arr_time=-1;s[10].no_of_gift=-1;s[10].burst_time=-1;
 	printf("Student\tArrival time\tNo of gift\tTime required for billing\n");
 	for(i=0;i<n;i++)
